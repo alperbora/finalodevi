@@ -44,7 +44,7 @@ console.log('cevap:',a)
 
 3-) Problem 85: Counting Rectangles
 
-var g = 200000;
+var g = 2000000;
 var bestR = g;
 var bestPair = [0,0];
 
