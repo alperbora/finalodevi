@@ -1,0 +1,247 @@
+1-) Problem 5: Smallest Multiple 
+
+
+main:
+    for (var i = 1; true; i++) {
+        for (var j = 1; j< 20; j++) {
+            if ( i % (j + 1) !=0) {
+                continue main;    
+        }
+    }
+    console.log("cevap:" + i);
+    break;
+}
+----------------------------------------------------------------------------------------------------------
+
+2-) Problem 15: Lattice Paths 
+
+var s1=20
+var carp1=1;
+for(var i=1; i<=s1; i++)
+{
+carp1=carp1*i;
+}
+
+var s2=20
+var carp2=1;
+for(var i=1; i<=s2; i++)
+{
+carp2=carp2*i;
+}
+
+var s3=40
+var carp3=1;
+for(var i=1; i<=s3; i++)
+{
+carp3=carp3*i;
+}
+
+var a=carp3 / (carp1 * carp2);
+
+console.log('cevap:',a)
+
+---------------------------------------------------------------------------------------------------------
+
+3-) Problem 85: Counting Rectangles
+
+var g = 200000;
+var bestR = g;
+var bestPair = [0,0];
+
+for(var n = 0; n < 100; n++) {
+	for(var m = n; m < 100; m++) {
+		var r = n*m*(n+1)*(m+1)/4;
+		if(Math.abs(r-g) < bestR) {
+		bestR = Math.abs(r-g);
+		bestPair = [n,m];
+		}
+	}
+}
+
+console.log(bestR,bestPair)
+console.log(bestPair[0]*bestPair[1]);
+
+-----------------------------------------------------------------------------------------
+
+4-) Problem 45: Triangular, Pentagonal and Hexagonal
+
+
+function tri(n) {return n*(n+1)/2;}
+function pen(n) {return n*(3*n-1)/2;}
+function hex(n) {return n*(2*n-1);}
+
+var t = 1;
+var p = 1;
+var numTri = 1;
+var numPen = 1;
+var numHex = 1;
+
+for(var h=1; h < 100000; h++) {
+	var numHex = hex(h)
+	while(numTri < numHex) {t++ ; numTri = tri(t);}
+	while(numPen < numHex) {p++ ; numPen = pen(p);}
+
+	if(numTri == numHex && numPen == numHex && h > 143) {
+		console.log(numHex);
+	}
+}
+
+-----------------------------------------------------------------------------------------------------------------
+5-) Problem 35: Circular Primes
+
+var prime = {};
+prime.isPrime = function(num) {
+    num = (num > 0) ? num : num * -1;
+    return factors.getFactors(num).length <= 2;
+}; 
+var factors = {};
+factors.getFactors = function(number) {
+    var factors = [];
+
+    var possibleFactor = 1;
+    var sqrt = Math.sqrt(number);
+    while (possibleFactor <= sqrt) {
+        if (number % possibleFactor == 0) {
+            factors[factors.length] = possibleFactor;
+
+            var otherPossibleFactor = number / possibleFactor;
+            if (otherPossibleFactor > possibleFactor) {
+                factors[factors.length] = otherPossibleFactor;
+            }
+        }
+        possibleFactor++;
+    }
+
+    return factors;
+}; 
+var bigNumber = {};
+bigNumber.createFromNumber = function(number) {
+    var bigNum = [number];
+    bigNumber.rebalanceDigitArray(bigNum);
+    return bigNum;
+};
+bigNumber.rebalanceDigitArray = function(digits, index) {
+    index = index || 0;
+    var digit = digits[index];
+    while (digit > 9) {
+        
+        digits[index] = digit % 10;
+
+        
+        index++;
+        digits[index] = digit = (digits[index] || 0) + ((digit - digit % 10) / 10);
+    }
+}; 
+var getCircularPrimes = function(numDigits) {
+    var circularPrimes;
+    if (numDigits < 1) {
+        circularPrimes = {};
+    } else if (numDigits == 1) {
+        circularPrimes = {
+            '2': true,
+            '3': true,
+            '5': true,
+            '7': true
+        };
+    } else {
+        var circularPrimes = getCircularPrimes(numDigits - 1);
+
+        var digits = [];
+        for (var i = 0; i < numDigits; i++) {
+            digits[i] = 1;
+        }
+
+        var continueLoop = true;
+        while (continueLoop) {
+            var combination, combinations = getCombinations(digits);
+            var circularPrime = true;
+
+            for (var i = 0; i < combinations.length; i++) {
+                if (!prime.isPrime(combinations[i])) {
+                    circularPrime = false;
+                }
+            }
+
+            if (circularPrime) {
+                for (var i = 0, combination; combination = combinations[i]; i++) {
+                    circularPrimes['' + combination] = true;
+                }
+            }
+
+            
+            var digit = numDigits - 1;
+            var digitLoop = true;
+            while (digitLoop) {
+                digitLoop = false;
+
+                if (digits[digit] == 9) {
+                    digits[digit] = 0;
+                    digit--;
+                    digitLoop = true;
+                } else {
+                    digits[digit]++
+                }
+            }
+
+
+            digits[digit] = (digits[digit] + 1) % 10;
+            while (digits[digit] == 0 && digit >= 0) {
+                digits[digit]++;
+                digit--;
+            }
+
+
+            var digit = 0;
+            while ((digits[digit] == 9) && (digit < numDigits)) {
+                if (digit == numDigits - 1) {
+                    continueLoop = false;
+                }
+                digit++;
+            }
+        }
+    }
+
+    return circularPrimes;
+};
+
+var getCombinations = function(digits) {
+    var combinations = [];
+
+    var length = digits.length;
+
+    for (var shift = 0; shift < length; shift++) {
+
+        var num = 0;
+        for (var i = 0; i < length; i++) {
+            num += digits[i] * Math.pow(10, (length - 1 - i + shift) % length);
+        }
+        combinations.push(num);
+    }
+    return combinations;
+};
+
+var twoDigitCircularPrimes = getCircularPrimes(2);
+console.log(twoDigitCircularPrimes);
+
+        var size = 0;
+for (var key in twoDigitCircularPrimes) {
+    if (twoDigitCircularPrimes[key]){
+        size++;
+    }
+}
+console.log(size);
+
+
+var n = 3        
+var nDigitCircularPrimes = getCircularPrimes(6);
+console.log(nDigitCircularPrimes );
+
+        var sizeN = 0;
+for (var key in nDigitCircularPrimes) {
+    if (nDigitCircularPrimes[key]){
+        sizeN++;
+    }
+}
+
+
+console.log(sizeN);
