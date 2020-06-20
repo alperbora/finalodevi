@@ -48,7 +48,7 @@ var sortArrayByParity = function(A) {
 sortArrayByParity(b)
 ---------------------------------------------------------------------------------------------
 
-Problem 1185: Day of the Week
+5-)Problem 1185: Day of the Week
 
 var tarih = new Date();
 tarih.setFullYear(2001, 2, 24);
